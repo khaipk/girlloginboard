@@ -1,6 +1,8 @@
 package login;
 
-public class GirlsData {
+import java.io.Serializable;
+
+public class GirlsData implements Serializable{
 	private String name;
 	private int age;
 	private String city;

@@ -16,6 +16,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import java.awt.Color;
@@ -31,7 +32,8 @@ public class GirlLogin extends JFrame {
 	private JTextField textField_4;
 	private JTextField textField_5;
 	private JTextField textField_6;
-
+	JComboBox comboBox = new JComboBox();
+	ArrayList<GirlsData> girls = new ArrayList<>();
 	/**
 	 * Launch the application.
 	 */
@@ -84,18 +86,31 @@ public class GirlLogin extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				for(GirlsData girl : girls) {
 				if(textField.getText().equals(girl.getName())) {
-					JOptionPane.showMessageDialog(null, "Login Successful");
+					JOptionPane.showMessageDialog(null, "Login Successful. Your infomation: \n"+girl);
 				}
-			}
+			}}
 		});
 		
 		JButton btnNewButton_1 = new JButton("Sign up");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(textField_1.getText().length()==0) 
+					JOptionPane.showMessageDialog(null, "You must type your name!");
+				else if(comboBox.getSelectedIndex()==0){
+					JOptionPane.showMessageDialog(null, "I'm not interested with Man");
+				} else {
+					GirlsData girl = new GirlsData();
 				girl.setName(textField_1.getText());
 				girl.setAge(Integer.parseInt(textField_2.getText()));
-			}
+				girl.setCity(textField_3.getText());
+				girl.setHeight(textField_4.getText());
+				girl.setWeight(textField_5.getText());
+				girl.setBody(textField_6.getText());
+				girls.add(girl);
+				JOptionPane.showMessageDialog(null, "Done. You are one of my girlfriends.");
+			}}
 		});
 		btnNewButton_1.setBounds(65, 138, 89, 23);
 		contentPane.add(btnNewButton_1);
@@ -158,7 +173,7 @@ public class GirlLogin extends JFrame {
 		chckbxNewCheckBox.setBounds(183, 176, 115, 23);
 		contentPane.add(chckbxNewCheckBox);
 		
-		JComboBox comboBox = new JComboBox();
+		
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Male", "Female"}));
 		comboBox.setBounds(183, 208, 96, 20);
 		contentPane.add(comboBox);
@@ -201,5 +216,32 @@ public class GirlLogin extends JFrame {
 		txtrImOnlyInterest.setText("I'm only interest in Cute, Sexy, maybe Lewd Girls.");
 		txtrImOnlyInterest.setBounds(239, 42, 140, 63);
 		contentPane.add(txtrImOnlyInterest);
+		
+		JButton btnNewButton_2 = new JButton("Save Girls");
+		btnNewButton_2.setBounds(340, 261, 89, 23);
+		contentPane.add(btnNewButton_2);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				boolean result =
+				SaveData.saveData(girls, "E:/Girls data.dat");
+				if (result==true) {
+					JOptionPane.showMessageDialog(null, "Save Girl Successful");
+				}
+			}
+		});
+		
+		JButton btnNewButton_3 = new JButton("Load Girls");
+		btnNewButton_3.setBounds(340, 295, 89, 23);
+		contentPane.add(btnNewButton_3);
+		btnNewButton_3.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Object girl = SaveData.loadData("E:/Girls data.dat");
+				girls = (ArrayList<GirlsData>) girl;
+			}
+		});
 	}
 }
